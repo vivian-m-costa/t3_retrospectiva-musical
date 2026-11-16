@@ -1,5 +1,176 @@
 Relatório: https://www.overleaf.com/project/6afaff1bf91cb6c11ac42296/share#e64997d0bc9ef2c7a6caeb244e687742ecbb66433bfaa83f
 
+
+# Ritmoteca: retrospectiva musical
+
+Trabalho Prático 3 de **SCC0223 – Estruturas de Dados I** (ICMC-USP, 2º semestre de 2026).
+
+O programa lê comandos da entrada padrão e responde consultas sobre quantas vezes cada usuário ouviu cada música e sobre o ranking geral das mais tocadas. A tabela completa (100 000 × 100 000) não cabe na memória, então guardamos **apenas as células não nulas**.
+
+## Sumário
+
+- [Comandos](#comandos)
+- [Estruturas de dados](#estruturas-de-dados)
+- [Organização dos arquivos](#organização-dos-arquivos)
+- [Como compilar e usar](#como-compilar-e-usar)
+- [Testes](#testes)
+- [Medição de desempenho](#medição-de-desempenho)
+- [Status do trabalho](#status-do-trabalho)
+- [Grupo](#grupo)
+
+## Comandos
+
+| Comando | Efeito | Saída |
+|---|---|---|
+| `OUVE u m` | o usuário `u` ouve a música `m` uma vez | nenhuma |
+| `QUANTAS u m` | quantas vezes `u` ouviu `m` | o número |
+| `POSICAO m` | posição de `m` no ranking geral | posição (a partir de 1) ou `-` |
+| `KESIMA k` | música na posição `k` do ranking | número da música ou `-` |
+| `FAVORITA u` | música que `u` mais ouviu (empate: menor número) | número da música ou `-` |
+| `ESQUECE u` | apaga o histórico de `u` (os impulsos das músicas ficam) | nenhuma |
+| `IMPULSO x` | toda música já no ranking ganha `x` execuções no total | nenhuma |
+| `RETIRA m` | `m` sai do catálogo, com suas contagens e impulsos | nenhuma |
+| `FAIXA a b` | quantas músicas têm total entre `a` e `b` | a contagem |
+| `FIM` | encerra | nenhuma |
+
+**Ranking geral:** músicas com total > 0, em ordem decrescente de total; no empate, vem antes a de menor número.
+
+**Limites:** até 100 000 usuários, 100 000 músicas e 200 000 comandos; `x` do `IMPULSO` entre 1 e 1 000.
+
+## Estruturas de dados
+
+Três estruturas trabalham juntas, e o `main.c` faz a ligação entre elas.
+
+| Estrutura | Chave | Guarda | Atende |
+|---|---|---|---|
+| **AVL da linha** (uma por usuário) | nº da música | contagem e ponteiro `melhor` da subárvore | `QUANTAS`, `FAVORITA`, `ESQUECE` |
+| **AVL da coluna** (uma por música) | nº do usuário | só quem ouviu | `RETIRA` |
+| **AVL do ranking** (única) | (total decrescente, nº da música crescente) | tamanho da subárvore | `POSICAO`, `KESIMA`, `FAIXA` |
+| **Variável `deslocamento`** | n/a | soma dos impulsos | `IMPULSO` em O(1) |
+
+### Ideias principais
+
+- **FAVORITA em O(1):** cada nó da linha guarda o melhor nó da sua subárvore. A raiz sempre sabe o favorito, e o valor é recalculado no caminho de volta da recursão.
+- **RETIRA sem visitar todos os usuários:** a coluna de cada música lista quem a ouviu, então só essas linhas são visitadas.
+- **POSICAO, KESIMA e FAIXA em O(log n):** o tamanho da subárvore em cada nó permite contar quantos nós vêm antes de uma chave, sem percorrer a árvore.
+- **IMPULSO em O(1):** somar o mesmo valor a todas as músicas não muda a ordem entre elas. O total real é `valor + deslocamento`. Uma música que entra no ranking guarda `1 - deslocamento`, então não recebe impulsos anteriores.
+- **Mudança de total:** a chave do ranking muda, então o nó é **removido e reinserido** (nunca alterado no lugar).
+
+### Custo por comando
+
+| Comando | Estruturas tocadas | Custo |
+|---|---|---|
+| `OUVE` | linha + coluna + ranking | O(log n) |
+| `QUANTAS` | linha | O(log k) |
+| `POSICAO` | ranking | O(log n) |
+| `KESIMA` | ranking | O(log n) |
+| `FAVORITA` | linha | O(1) |
+| `ESQUECE` | linha + coluna + ranking | O(k log n) |
+| `IMPULSO` | `deslocamento` | O(1) |
+| `RETIRA` | coluna + linhas + ranking | O(c log n) |
+| `FAIXA` | ranking | O(log n) |
+
+`k` é o número de músicas distintas do usuário e `c` é o número de usuários que ouviram a música. A comparação completa com outras estruturas (ABB, vetor ordenado, heap) está no relatório.
+
+## Organização dos arquivos
+
+### Cabeçalhos (`.h`)
+
+| Arquivo | O que expõe |
+|---|---|
+| `faixa.h` | `FaixaTocada`, `ACERVO_MAXIMO_100K`, `USUARIOS_MAXIMO` |
+| `usuarios.h` | `NoUsuario` (opaco), `usuario_incrementar`, `usuario_contagem`, `usuario_favorita`, `usuario_remover`, `usuario_esvaziar` |
+| `coluna.h` | `NoColuna` (opaco), inserção de usuário, percurso e esvaziamento |
+| `ranking.h` | `ranking_inserir`, `ranking_remover`, `ranking_tamanho`, `ranking_posicao`, `ranking_kesima`, `ranking_contar_ge` |
+
+### Implementações (`.c`)
+
+| Arquivo | Papel |
+|---|---|
+| `usuarios.c` | AVL da linha, com campo `melhor` |
+| `coluna.c` | AVL da coluna, sem contagem |
+| `ranking.c` | AVL com tamanho de subárvore |
+| `main.c` | leitura dos comandos, variável `deslocamento` e lógica de cada comando |
+| `gerador.c` | programa **separado** que imprime as rajadas de teste; não entra no executável principal |
+| `Makefile` | compila os dois executáveis (`ritmoteca` e `gerador`) |
+
+### Dependências
+
+```
+faixa.h ──► ranking.h / ranking.c
+        └─► coluna.h  / coluna.c
+usuarios.h / usuarios.c    (independente)
+main.c ──► usa as quatro estruturas
+gerador.c                  (independente, outro executável)
+```
+
+`usuarios.c`, `coluna.c` e `ranking.c` não incluem uns aos outros, o que permite testar cada TAD separadamente.
+
+## Como compilar e usar
+
+```bash
+make                       # gera ./ritmoteca e ./gerador
+./ritmoteca < entrada.txt  # lê comandos da entrada padrão
+```
+
+Flags usadas: `-std=c11 -Wall -Wextra -O2`. O código deve compilar **sem avisos**.
+
+Exemplo de entrada:
+
+```
+OUVE 1 10
+OUVE 1 10
+OUVE 2 20
+POSICAO 10
+KESIMA 1
+FIM
+```
+
+## Testes
+
+Os três exemplos do enunciado (seções 5.1, 5.2 e 5.3) e os casos da seção 4 são o ponto de partida. Além deles:
+
+- compare a saída com um verificador força-bruta simples em Python, usando entradas aleatórias pequenas;
+- teste os casos de borda: um único usuário, 100 000 músicas distintas e 200 000 comandos;
+- verifique vazamento de memória e acessos inválidos com o Valgrind:
+
+```bash
+valgrind --leak-check=full ./ritmoteca < entrada.txt
+```
+
+## Medição de desempenho
+
+O `gerador` imprime `n` comandos `OUVE` aleatórios, depois `n` comandos de uma rajada e, por fim, `FIM`.
+
+```bash
+./gerador POSICAO 50000 > entrada.txt
+time ./ritmoteca < entrada.txt
+```
+
+Rajadas disponíveis: `POSICAO`, `KESIMA`, `FAVORITA`, `IMPULSO`, `RETIRA`. O relatório usa `n = 12 500, 25 000, 50 000 e 100 000` e um gráfico log-log, em que a inclinação da reta indica o expoente de crescimento do tempo (≈ 1 para custo O(1) por comando, ≈ 2 para O(n)).
+
+## Status do trabalho
+
+- [ ] `faixa.h`
+- [ ] `usuarios.h` / `usuarios.c`
+- [ ] `coluna.h` / `coluna.c`
+- [ ] `ranking.h` / `ranking.c`
+- [ ] `main.c`
+- [ ] `gerador.c`
+- [ ] `Makefile`
+- [ ] Verificação com Valgrind
+- [ ] Medições e gráfico log-log
+- [ ] Relatório (capa, projeto, justificativa, medição, ponto fraco, casos de teste)
+- [ ] Entrega: `T3_<numeroUSP>.zip` com os arquivos na raiz, até **04/12/2026**
+
+## Grupo
+
+| Nome | Número USP |
+|---|---|
+| _preencher_ | _preencher_ |
+| _preencher_ | _preencher_ |
+| _preencher_ | _preencher_ |
+
 # t3_retrospectiva-musical
 <img width="941" height="535" alt="image" src="https://github.com/user-attachments/assets/00645628-b3cf-4da3-803a-e5762519210f" />
 
