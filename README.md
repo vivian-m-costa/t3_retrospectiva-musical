@@ -151,7 +151,7 @@ Rajadas disponíveis: `POSICAO`, `KESIMA`, `FAVORITA`, `IMPULSO`, `RETIRA`. O re
 
 ## Status do trabalho
 
-- [ ] `faixa.h`
+- [ok] `faixa.h`
 - [ ] `usuarios.h` / `usuarios.c`
 - [ ] `coluna.h` / `coluna.c`
 - [ ] `ranking.h` / `ranking.c`
@@ -163,13 +163,6 @@ Rajadas disponíveis: `POSICAO`, `KESIMA`, `FAVORITA`, `IMPULSO`, `RETIRA`. O re
 - [ ] Relatório (capa, projeto, justificativa, medição, ponto fraco, casos de teste)
 - [ ] Entrega: `T3_<numeroUSP>.zip` com os arquivos na raiz, até **04/12/2026**
 
-## Grupo
-
-| Nome | Número USP |
-|---|---|
-| _preencher_ | _preencher_ |
-| _preencher_ | _preencher_ |
-| _preencher_ | _preencher_ |
 
 # t3_retrospectiva-musical
 <img width="941" height="535" alt="image" src="https://github.com/user-attachments/assets/00645628-b3cf-4da3-803a-e5762519210f" />
