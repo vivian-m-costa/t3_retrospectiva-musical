@@ -1,7 +1,7 @@
 Relatório: https://www.overleaf.com/project/6afaff1bf91cb6c11ac42296/share#e64997d0bc9ef2c7a6caeb244e687742ecbb66433bfaa83f
 
 
-# Ritmoteca: retrospectiva musical
+# T3: retrospectiva musical
 
 Trabalho Prático 3 de **SCC0223 – Estruturas de Dados I** (ICMC-USP, 2º semestre de 2026).
 
@@ -92,7 +92,7 @@ Três estruturas trabalham juntas, e o `main.c` faz a ligação entre elas.
 | `ranking.c` | AVL com tamanho de subárvore |
 | `main.c` | leitura dos comandos, variável `deslocamento` e lógica de cada comando |
 | `gerador.c` | programa **separado** que imprime as rajadas de teste; não entra no executável principal |
-| `Makefile` | compila os dois executáveis (`ritmoteca` e `gerador`) |
+| `Makefile` | compila os dois executáveis (`t3` e `gerador`) |
 
 ### Dependências
 
@@ -109,8 +109,8 @@ gerador.c                  (independente, outro executável)
 ## Como compilar e usar
 
 ```bash
-make                       # gera ./ritmoteca e ./gerador
-./ritmoteca < entrada.txt  # lê comandos da entrada padrão
+make                       # gera ./t3 e ./gerador
+./t3 < entrada.txt  # lê comandos da entrada padrão
 ```
 
 Flags usadas: `-std=c11 -Wall -Wextra -O2`. O código deve compilar **sem avisos**.
@@ -135,7 +135,7 @@ Os três exemplos do enunciado (seções 5.1, 5.2 e 5.3) e os casos da seção 4
 - verifique vazamento de memória e acessos inválidos com o Valgrind:
 
 ```bash
-valgrind --leak-check=full ./ritmoteca < entrada.txt
+valgrind --leak-check=full ./t3 < entrada.txt
 ```
 
 ## Medição de desempenho
@@ -144,7 +144,7 @@ O `gerador` imprime `n` comandos `OUVE` aleatórios, depois `n` comandos de uma 
 
 ```bash
 ./gerador POSICAO 50000 > entrada.txt
-time ./ritmoteca < entrada.txt
+time ./t3 < entrada.txt
 ```
 
 Rajadas disponíveis: `POSICAO`, `KESIMA`, `FAVORITA`, `IMPULSO`, `RETIRA`. O relatório usa `n = 12 500, 25 000, 50 000 e 100 000` e um gráfico log-log, em que a inclinação da reta indica o expoente de crescimento do tempo (≈ 1 para custo O(1) por comando, ≈ 2 para O(n)).

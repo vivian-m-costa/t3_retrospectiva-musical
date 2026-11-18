@@ -2,7 +2,7 @@
 #define FAIXA_H
 
 #define Max 100000
-#define Usuariosmax    100000
+#define Usuariosmax 100000
 
 /* No da AVL da coluna de uma musica: so guarda QUEM ouviu (sem contagem;
  * a contagem fica na linha do usuario). Definido em coluna.c. */
