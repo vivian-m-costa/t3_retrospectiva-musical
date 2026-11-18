@@ -78,7 +78,7 @@ Três estruturas trabalham juntas, e o `main.c` faz a ligação entre elas.
 
 | Arquivo | O que expõe |
 |---|---|
-| `faixa.h` | `FaixaTocada`, `ACERVO_MAXIMO_100K`, `USUARIOS_MAXIMO` |
+| `faixa.h` | `Musica`, `Max`, `Usuariosmax` |
 | `usuarios.h` | `NoUsuario` (opaco), `usuario_incrementar`, `usuario_contagem`, `usuario_favorita`, `usuario_remover`, `usuario_esvaziar` |
 | `coluna.h` | `NoColuna` (opaco), inserção de usuário, percurso e esvaziamento |
 | `ranking.h` | `ranking_inserir`, `ranking_remover`, `ranking_tamanho`, `ranking_posicao`, `ranking_kesima`, `ranking_contar_ge` |
