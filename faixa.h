@@ -12,7 +12,7 @@ struct NoColuna;
  * as musicas ficam num vetor indexado pelo numero (sem malloc por no). Nao poder ser uma heap,
  devido a falta de ordem interna*/
 typedef struct Musica {
-    int id;                     /* numero da musica (1..ACERVO_MAXIMO_100K) */
+    int id;                     /* numero da musica (1..Max) */
 
     /* total real = valor + deslocamento (deslocamento = soma dos IMPULSOs).
      * long long so para nao se preocupar com estouro nas contas. */
