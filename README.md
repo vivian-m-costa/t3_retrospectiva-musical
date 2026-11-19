@@ -154,7 +154,7 @@ Rajadas disponíveis: `POSICAO`, `KESIMA`, `FAVORITA`, `IMPULSO`, `RETIRA`. O re
 - [ok] `faixa.h`
 - [ ] `usuarios.h` / `usuarios.c`
 - [ ] `coluna.h` / `coluna.c`
-- [ ] `ranking.h` / `ranking.c`
+- [ok] `ranking.h` / `ranking.c`
 - [ ] `main.c`
 - [ ] `gerador.c`
 - [ ] `Makefile`
