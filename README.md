@@ -152,7 +152,7 @@ Rajadas disponíveis: `POSICAO`, `KESIMA`, `FAVORITA`, `IMPULSO`, `RETIRA`. O re
 ## Status do trabalho
 
 - [ok] `faixa.h`
-- [ ] `usuarios.h` / `usuarios.c`
+- [ok] `usuarios.h` / `usuarios.c`
 - [ ] `coluna.h` / `coluna.c`
 - [ok] `ranking.h` / `ranking.c`
 - [ ] `main.c`
