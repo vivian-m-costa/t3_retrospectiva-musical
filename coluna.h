@@ -1,21 +1,18 @@
 #ifndef COLUNA_H
 #define COLUNA_H
 
-/* AVL por numero do usuario = UMA COLUNA da tabela (uma musica).
- * So guarda QUEM ouviu; a contagem fica na linha do usuario. */
+// AVL por número do usuário = uma coluna da tabela (uma música).
 typedef struct NoColuna NoColuna;
 
-/* Insere o usuario u (nao faz nada se ja existe). Devolve a nova raiz. */
+// Insere o usuário u (não faz nada se já existe), devolve a nova raiz.
 NoColuna *coluna_inserir(NoColuna *raiz, int u);
 
-/* Apaga o usuario u (nao faz nada se ausente). Devolve a nova raiz. */
+// Apaga o usuário u (não faz nada se ausente), devolve a nova raiz.
 NoColuna *coluna_remover(NoColuna *raiz, int u);
 
-/* 1 se u esta na coluna, 0 se nao. */
+// Verifica se o usuário está na coluna
 int coluna_contem(const NoColuna *raiz, int u);
 
-/* Chama cb(u, ctx) para cada usuario (ordem crescente) e libera a arvore.
- * cb pode ser NULL. O chamador deve fazer musica->coluna = NULL. */
 void coluna_esvaziar(NoColuna *raiz, void (*cb)(int u, void *ctx), void *ctx);
 
 #endif

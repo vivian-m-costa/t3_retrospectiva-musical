@@ -62,7 +62,7 @@ NoColuna *coluna_inserir(NoColuna *raiz, int u) {
         n->altura = 1;
         return n;
     }
-    if (u == raiz->u) return raiz;          /* ja estava: nada a fazer */
+    if (u == raiz->u) return raiz;
     if (u < raiz->u) raiz->esq = coluna_inserir(raiz->esq, u);
     else             raiz->dir = coluna_inserir(raiz->dir, u);
     return balancear(raiz);
@@ -95,7 +95,7 @@ int coluna_contem(const NoColuna *raiz, int u) {
         if (u == raiz->u) return 1;
         raiz = (u < raiz->u) ? raiz->esq : raiz->dir;
     }
-    return 0;
+    return (0);
 }
 
 void coluna_esvaziar(NoColuna *raiz, void (*cb)(int u, void *ctx), void *ctx) {
