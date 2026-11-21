@@ -155,7 +155,7 @@ Rajadas disponíveis: `POSICAO`, `KESIMA`, `FAVORITA`, `IMPULSO`, `RETIRA`. O re
 - [ok] `usuarios.h` / `usuarios.c`
 - [ok] `coluna.h` / `coluna.c`
 - [ok] `ranking.h` / `ranking.c`
-- [ ] `main.c`
+- [ok] `main.c`
 - [ ] `gerador.c`
 - [ ] `Makefile`
 - [ ] Verificação com Valgrind
