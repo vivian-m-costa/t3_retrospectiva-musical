@@ -67,7 +67,7 @@ Três estruturas trabalham juntas, e o `main.c` faz a ligação entre elas.
 | `FAVORITA` | linha | O(1) |
 | `ESQUECE` | linha + coluna + ranking | O(k log n) |
 | `IMPULSO` | `deslocamento` | O(1) |
-| `RETIRA` | coluna + linhas + ranking | O(c log n) |
+| `RETIRA` | coluna + linhas + ranking | O(c · log k + log n) |
 | `FAIXA` | ranking | O(log n) |
 
 `k` é o número de músicas distintas do usuário e `c` é o número de usuários que ouviram a música. A comparação completa com outras estruturas (ABB, vetor ordenado, heap) está no relatório.
